@@ -8,6 +8,10 @@ import { calcLiuyao } from './liuyao/index.js';
 import { formatBaziReport } from './formatter/formatReport.js';
 import { formatLiuyaoReport } from './formatter/formatLiuyao.js';
 import { formatWuxingBar, formatWuxingAnalysis } from './formatter/formatBazi.js';
+import { formatZiwei } from './formatter/formatZiwei.js';
+import { formatFengshui } from './formatter/formatFengshui.js';
+import { calcZiwei } from './ziwei/index.js';
+import { calcFengshui } from './fengshui/index.js';
 import { interpretBazi } from './ai/interpreter.js';
 import { setConfigValue, loadConfig } from './ai/config.js';
 
@@ -73,25 +77,31 @@ program
     console.log('');
   });
 
-// 紫微斗数 (placeholder)
+// 紫微斗数
 program
   .command('ziwei')
-  .description('紫微斗数')
+  .description('紫微斗数排盘')
   .argument('<datetime>', '出生日期时间 (YYYY-MM-DD HH:mm)')
-  .action((_datetime: string) => {
+  .action((datetime: string) => {
+    const parsed = parseDate(datetime);
+    const result = calcZiwei(parsed.year, parsed.month, parsed.day, parsed.hour);
     console.log('');
-    console.log(chalk.yellow('  🔮 紫微斗数功能开发中，敬请期待'));
+    console.log(formatZiwei(result));
     console.log('');
   });
 
-// 风水方位 (placeholder)
+// 风水方位
 program
   .command('fengshui')
   .description('风水方位分析')
-  .argument('<datetime>', '出生日期时间 (YYYY-MM-DD HH:mm)')
-  .action((_datetime: string) => {
+  .argument('<date>', '出生日期 (YYYY-MM-DD)')
+  .option('--gender <gender>', '性别 (male/female)', 'male')
+  .action((date: string, opts: { gender: string }) => {
+    const parsed = parseDate(date);
+    const gender = opts.gender === 'female' ? 'female' : 'male';
+    const result = calcFengshui(parsed.year, parsed.month, parsed.day, gender);
     console.log('');
-    console.log(chalk.yellow('  🔮 风水方位分析功能开发中，敬请期待'));
+    console.log(formatFengshui(result));
     console.log('');
   });
 

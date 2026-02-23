@@ -1,2 +1,8 @@
 export { calcFengshui } from './calcFengshui.js';
-export type { FengshuiResult, FlyingStarInfo } from './types.js';
+export type {
+  FengshuiResult,
+  MingGua,
+  DirectionInfo,
+  FlyingStarInfo,
+  FlyingStarGrid,
+} from './types.js';
